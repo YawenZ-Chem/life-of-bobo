@@ -1,0 +1,106 @@
+{{- $src1 := .Get "src1" -}}
+{{- $src2 := .Get "src2" -}}
+
+{{- $media1 := .Page.Resources.GetMatch $src1 -}}
+{{- $media2 := .Page.Resources.GetMatch $src2 -}}
+
+{{- $kind1 := .Get "kind1" | default "image" -}}
+{{- $kind2 := .Get "kind2" | default "image" -}}
+
+{{- if and $media1 $media2 -}}
+
+<section class="story-pair bobo-story-pair">
+
+  <div class="story-pair__pictures bobo-story-pair__pictures">
+
+    <!-- First picture or video -->
+    <figure class="story-pair__item bobo-story-pair__picture">
+
+      {{- if eq $kind1 "video" }}
+
+      <video
+        class="story-media-frame"
+        controls
+        playsinline
+        preload="metadata"
+        aria-label="{{ .Get "caption1" }}"
+      >
+        <source
+          src="{{ $media1.RelPermalink }}"
+          type="{{ $media1.MediaType.Type }}"
+        >
+        Your browser does not support embedded video.
+      </video>
+
+      {{- else }}
+
+      <img
+        class="story-media-frame"
+        src="{{ $media1.RelPermalink }}"
+        alt="{{ .Get "alt1" }}"
+        loading="lazy"
+        decoding="async"
+      >
+
+      {{- end }}
+
+      {{- with .Get "caption1" }}
+      <figcaption>{{ . }}</figcaption>
+      {{- end }}
+
+    </figure>
+
+    <!-- Second picture or video -->
+    <figure class="story-pair__item bobo-story-pair__picture">
+
+      {{- if eq $kind2 "video" }}
+
+      <video
+        class="story-media-frame"
+        controls
+        playsinline
+        preload="metadata"
+        aria-label="{{ .Get "caption2" }}"
+      >
+        <source
+          src="{{ $media2.RelPermalink }}"
+          type="{{ $media2.MediaType.Type }}"
+        >
+        Your browser does not support embedded video.
+      </video>
+
+      {{- else }}
+
+      <img
+        class="story-media-frame"
+        src="{{ $media2.RelPermalink }}"
+        alt="{{ .Get "alt2" }}"
+        loading="lazy"
+        decoding="async"
+      >
+
+      {{- end }}
+
+      {{- with .Get "caption2" }}
+      <figcaption>{{ . }}</figcaption>
+      {{- end }}
+
+    </figure>
+
+  </div>
+
+  <!-- Shared text below both media items -->
+  <div class="story-pair__text bobo-story-pair__text">
+    {{ .Inner | markdownify }}
+  </div>
+
+</section>
+
+{{- else -}}
+
+<p class="story-media-error">
+  One or both paired media files could not be found:
+  {{ $src1 }} / {{ $src2 }}
+</p>
+
+{{- end -}}

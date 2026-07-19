@@ -1,0 +1,65 @@
+{{- $src := .Get "src" -}}
+{{- $media := .Page.Resources.GetMatch $src -}}
+{{- $side := .Get "side" | default "left" -}}
+{{- $kind := .Get "kind" | default "image" -}}
+
+{{- if $media -}}
+
+<section
+  class="
+    story-row
+    story-row--{{ $side }}
+    bobo-story-row
+    bobo-story-row--{{ $side }}
+  "
+>
+
+  <figure class="story-row__media bobo-story-row__media">
+
+    {{- if eq $kind "video" }}
+
+    <video
+      class="story-media-frame"
+      controls
+      playsinline
+      preload="metadata"
+      aria-label="{{ .Get "caption" }}"
+    >
+      <source
+        src="{{ $media.RelPermalink }}"
+        type="{{ $media.MediaType.Type }}"
+      >
+      Your browser does not support embedded video.
+    </video>
+
+    {{- else }}
+
+    <img
+      class="story-media-frame"
+      src="{{ $media.RelPermalink }}"
+      alt="{{ .Get "alt" }}"
+      loading="lazy"
+      decoding="async"
+    >
+
+    {{- end }}
+
+    {{- with .Get "caption" }}
+    <figcaption>{{ . }}</figcaption>
+    {{- end }}
+
+  </figure>
+
+  <div class="story-row__text bobo-story-row__text">
+    {{ .Inner | markdownify }}
+  </div>
+
+</section>
+
+{{- else -}}
+
+<p class="story-media-error">
+  Media not found: {{ $src }}
+</p>
+
+{{- end -}}

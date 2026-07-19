@@ -1,0 +1,62 @@
+{{- $src1 := .Get "src1" -}}
+{{- $src2 := .Get "src2" -}}
+{{- $src3 := .Get "src3" -}}
+
+{{- $image1 := .Page.Resources.GetMatch $src1 -}}
+{{- $image2 := .Page.Resources.GetMatch $src2 -}}
+{{- $image3 := .Page.Resources.GetMatch $src3 -}}
+
+{{- if and $image1 $image2 $image3 -}}
+
+<section class="bobo-story-trio">
+
+  <div class="bobo-story-trio__pictures">
+
+    <figure class="bobo-story-trio__picture story-media-frame">
+      <img
+        src="{{ $image1.RelPermalink }}"
+        alt="{{ .Get "alt1" }}"
+        loading="lazy"
+        decoding="async"
+      >
+    </figure>
+
+    <figure class="bobo-story-trio__picture story-media-frame">
+      <img
+        src="{{ $image2.RelPermalink }}"
+        alt="{{ .Get "alt2" }}"
+        loading="lazy"
+        decoding="async"
+      >
+    </figure>
+
+    <figure class="bobo-story-trio__picture story-media-frame">
+      <img
+        src="{{ $image3.RelPermalink }}"
+        alt="{{ .Get "alt3" }}"
+        loading="lazy"
+        decoding="async"
+      >
+    </figure>
+
+  </div>
+
+  {{- with .Get "title" }}
+  <h2 class="bobo-story-trio__title">
+    {{ . }}
+  </h2>
+  {{- end }}
+
+  <div class="bobo-story-trio__text">
+    {{ $.Inner | markdownify }}
+  </div>
+
+</section>
+
+{{- else -}}
+
+<p class="story-media-error">
+  One or more images in the three-picture row could not be found.
+</p>
+
+{{- end -}}

@@ -1,0 +1,36 @@
+{{ define "main" }}
+{{ $caller := . }}
+
+<main class="page-main pa4 {{ .Kind }}" role="main">
+  <section class="blog-content mw7 center">
+
+    <!-- Stories page title and description -->
+    <header class="mb5 pb4 bb b--black-10">
+      <h1 class="f1 fw7 mv2 lh-title">
+        {{ .Title | markdownify }}
+      </h1>
+
+      {{ with .Description }}
+        <div class="f4 lh-copy measure-wide">
+          {{ . | markdownify }}
+        </div>
+      {{ end }}
+    </header>
+
+    <!-- Story cards -->
+    {{ $paginator := .Paginate (where .RegularPagesRecursive "Type" "blog").ByDate.Reverse }}
+
+    {{ range $paginator.Pages }}
+      {{ .Scratch.Set "$root" $caller }}
+      {{ partial "shared/summary" . }}
+    {{ end }}
+
+    {{ partial "shared/list-pagination.html" . }}
+
+  </section>
+</main>
+
+<aside class="page-sidebar" role="complementary">
+  {{ partial "shared/sidebar-scaffold.html" . }}
+</aside>
+{{ end }}

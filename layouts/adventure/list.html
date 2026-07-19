@@ -1,0 +1,79 @@
+{{ define "main" }}
+
+<main class="page-main pa4" role="main">
+
+  <header class="adventure-header">
+    <h1>{{ .Title | markdownify }}</h1>
+
+    {{ with .Description }}
+      <p>{{ . | markdownify }}</p>
+    {{ end }}
+  </header>
+
+  <div class="adventure-page-layout">
+
+    <section class="adventure-birthday-list">
+
+      {{/* Find all pages belonging to the current Adventure section */}}
+      {{ $pages := where .Site.RegularPages "Section" .Section }}
+
+      {{ range $pages.ByWeight }}
+        {{ $page := . }}
+
+        {{/* Look for the cover in the current language */}}
+        {{ $featured := $page.Resources.GetMatch "featured*" }}
+
+        {{/* If unavailable, borrow it from the English translation */}}
+        {{ if not $featured }}
+          {{ range $translation := $page.Translations }}
+            {{ if not $featured }}
+              {{ $featured = $translation.Resources.GetMatch "featured*" }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+
+        <article class="adventure-birthday-card">
+
+          {{ with $featured }}
+            <a class="adventure-birthday-image"
+               href="{{ $page.RelPermalink }}">
+              <img
+                src="{{ .RelPermalink }}"
+                alt="{{ $page.Title }}">
+            </a>
+          {{ end }}
+
+          <div class="adventure-birthday-text">
+            <h2>
+              <a href="{{ $page.RelPermalink }}">
+                {{ $page.Title | markdownify }}
+              </a>
+            </h2>
+
+            {{ with $page.Params.description }}
+              <p>{{ . | markdownify }}</p>
+            {{ end }}
+          </div>
+
+        </article>
+      {{ end }}
+
+    </section>
+
+    <aside class="adventure-checklist-sidebar">
+      {{ with .Params.sidebar.title }}
+        <h2>{{ . | markdownify }}</h2>
+      {{ end }}
+
+      {{ with .Params.sidebar.description }}
+        <div class="adventure-checklist-content">
+          {{ . | markdownify }}
+        </div>
+      {{ end }}
+    </aside>
+
+  </div>
+
+</main>
+
+{{ end }}

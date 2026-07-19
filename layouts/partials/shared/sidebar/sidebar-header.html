@@ -1,0 +1,103 @@
+{{ if and .Params.sidebar .Params.sidebar.roommates }}
+
+  {{ with .Params.sidebar }}
+
+  <section
+    class="roommates-sidebar"
+    aria-labelledby="roommates-title"
+  >
+
+    <h2
+      id="roommates-title"
+      class="roommates-title"
+    >
+      {{ .title }}
+    </h2>
+
+    <div class="roommates-divider"></div>
+
+    <div class="roommates-list">
+
+      {{ range .profiles }}
+
+      <div class="roommate-profile">
+
+        {{ if .rain_icon }}
+
+        <button
+          class="roommate-portrait-button"
+          type="button"
+          data-profile-rain
+          data-rain-icon="{{ .rain_icon | relURL }}"
+          aria-label="{{ .rain_label }}"
+        >
+          <img
+            class="roommate-headshot"
+            src="{{ .image | relURL }}"
+            alt="{{ .alt }}"
+          >
+        </button>
+
+        {{ else }}
+
+        <img
+          class="roommate-headshot"
+          src="{{ .image | relURL }}"
+          alt="{{ .alt }}"
+          loading="lazy"
+        >
+
+        {{ end }}
+
+        <div class="roommate-info">
+          <h3 class="roommate-name">
+            {{ .name }}
+          </h3>
+
+          <p class="roommate-occupation">
+            {{ .occupation }}
+          </p>
+        </div>
+
+      </div>
+
+      {{ end }}
+
+    </div>
+
+  </section>
+
+  {{ end }}
+
+  <script
+    src="{{ "js/roommate-fish-rain.js" | relURL }}?v=5"
+    defer
+  ></script>
+
+{{ else }}
+
+  <!-- Keep the normal Apéro sidebar on other sections -->
+
+  {{ with .Params.sidebar }}
+
+    {{ with .title }}
+      <h1 class="f3">
+        {{ . | markdownify }}
+      </h1>
+    {{ end }}
+
+    {{ with .description }}
+      <p class="f6 lh-copy measure">
+        {{ . | markdownify }}
+      </p>
+    {{ end }}
+
+    {{ with .author }}
+      <p class="f7 measure lh-copy i mh0-l">
+        Written by {{ . | markdownify }}
+      </p>
+    {{ end }}
+
+  {{ end }}
+
+{{ end }}

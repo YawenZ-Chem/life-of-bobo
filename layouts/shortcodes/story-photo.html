@@ -1,0 +1,28 @@
+{{- $src := .Get "src" -}}
+{{- $image := .Page.Resources.GetMatch $src -}}
+
+{{- if $image -}}
+
+<figure class="story-media story-photo bobo-story-media bobo-story-photo">
+
+  <img
+    class="story-media-frame"
+    src="{{ $image.RelPermalink }}"
+    alt="{{ .Get "alt" }}"
+    loading="lazy"
+    decoding="async"
+  >
+
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+
+</figure>
+
+{{- else -}}
+
+<p class="story-media-error">
+  Image not found: {{ $src }}
+</p>
+
+{{- end -}}

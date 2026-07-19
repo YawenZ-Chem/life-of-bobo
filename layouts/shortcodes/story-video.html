@@ -1,0 +1,34 @@
+{{- $src := .Get "src" -}}
+{{- $video := .Page.Resources.GetMatch $src -}}
+
+{{- if $video -}}
+
+<figure class="story-media story-video bobo-story-media bobo-story-video">
+
+  <video
+    class="story-media-frame"
+    controls
+    playsinline
+    preload="metadata"
+    aria-label="{{ .Get "caption" }}"
+  >
+    <source
+      src="{{ $video.RelPermalink }}"
+      type="{{ $video.MediaType.Type }}"
+    >
+    Your browser does not support embedded video.
+  </video>
+
+  {{- with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+
+</figure>
+
+{{- else -}}
+
+<p class="story-media-error">
+  Video not found: {{ $src }}
+</p>
+
+{{- end -}}

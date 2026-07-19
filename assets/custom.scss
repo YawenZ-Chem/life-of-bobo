@@ -1,0 +1,883 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+$font-family-sans-serif: "Fredoka", sans-serif;
+$font-family-serif: "Fredoka", sans-serif;
+
+body,
+html {
+  font-family: "Fredoka", sans-serif !important;
+}
+
+body *,
+header *,
+nav *,
+main *,
+footer * {
+  font-family: "Fredoka", sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Fredoka", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+p,
+li,
+a,
+span,
+summary {
+  font-family: "Fredoka", sans-serif !important;
+}
+
+nav a {
+  font-family: "Fredoka", sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Outfit photo gallery */
+.look-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: 1100px;
+}
+
+.look-gallery img {
+  display: block;
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+  .look-gallery {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+
+  .look-gallery img {
+    height: auto;
+  }
+}
+
+/* Hide only Hugo Apéro's post-information Details box */
+details.f6.fw7.input-reset {
+  display: none !important;
+}
+
+/* Adventures page layout */
+.adventure-header {
+  max-width: 760px;
+  margin: 5rem auto 3rem;
+  text-align: center;
+}
+
+.adventure-header h1 {
+  margin-bottom: 1.2rem;
+  font-size: 3.4rem;
+  line-height: 1.1;
+}
+
+.adventure-header p {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Main area: birthday albums + small right sidebar */
+.adventure-page-layout {
+  display: grid !important;
+  grid-template-columns: 680px 390px !important;
+  gap: 4rem;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  transform: translateX(2.5rem);
+}
+
+/* Birthday cards */
+.adventure-birthday-list {
+  min-width: 0;
+}
+
+.adventure-birthday-card {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: center;
+  padding: 1.75rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.adventure-birthday-card:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.adventure-birthday-image img {
+  display: block;
+  width: 240px !important;
+  height: 170px !important;
+  object-fit: cover;
+}
+
+.adventure-birthday-text h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.45rem;
+}
+
+.adventure-birthday-text p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Small checklist on the right */
+.adventure-checklist-sidebar {
+  position: sticky;
+  top: 6rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid rgba(196, 73, 42, 0.3);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.adventure-checklist-sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.adventure-checklist-sidebar ul {
+  padding-left: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.adventure-checklist-sidebar li {
+  margin-bottom: 0.25rem;
+}
+
+/* Mobile: sidebar moves below only on small screens */
+@media screen and (max-width: 900px) {
+  .adventure-page-layout {
+    grid-template-columns: 1fr !important;
+    max-width: 720px;
+  }
+
+  .adventure-checklist-sidebar {
+    position: static;
+    border-left: 0;
+    border-top: 2px solid rgba(196, 73, 42, 0.3);
+    padding-left: 0;
+    padding-top: 1.25rem;
+  }
+}
+/* Softer wooden frame for Bobo's Adventure Checklist */
+.adventure-checklist-sidebar {
+  position: sticky;
+  top: 6rem;
+
+  width: 330px;
+  padding: 1.6rem 1.8rem;
+
+  font-size: 0.98rem;
+  line-height: 1.55;
+
+  border: 8px solid #c49a6c;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(#fffaf0, #fff7e8) padding-box,
+    repeating-linear-gradient(
+      45deg,
+      #c49a6c 0px,
+      #c49a6c 10px,
+      #d8b887 10px,
+      #d8b887 20px,
+      #b9824d 20px,
+      #b9824d 30px
+    ) border-box;
+
+  box-shadow:
+    0 3px 0 #9a6a3d,
+    0 8px 18px rgba(0, 0, 0, 0.10);
+}
+
+.adventure-checklist-sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 1.1rem;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.adventure-checklist-sidebar p {
+  margin: 1rem 0 0.55rem;
+}
+
+.adventure-checklist-sidebar strong {
+  font-size: 1.05rem;
+}
+
+.adventure-checklist-sidebar ul {
+  padding-left: 1.15rem;
+  margin-top: 0.55rem;
+  margin-bottom: 1.3rem;
+}
+
+.adventure-checklist-sidebar li {
+  margin-bottom: 0.45rem;
+}
+
+/* Continuous birthday story */
+.birthday-story-page {
+  max-width: 920px;
+  margin: 2.5rem auto 4rem;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.birthday-story-lead {
+  max-width: 760px;
+  margin: 0 auto 2.75rem;
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+
+/* Each image-and-text row */
+.birthday-story-section {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  margin-bottom: 3rem;
+}
+
+/* Text is vertically centered beside the image */
+.birthday-story-text {
+  flex: 1;
+  min-width: 0;
+  order: 1;
+}
+
+.birthday-story-text p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.birthday-story-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Image sizing */
+.birthday-story-photo {
+  flex: 0 0 42%;
+  width: 42%;
+  max-width: 380px;
+  margin: 0;
+}
+
+/* Image appears on the left */
+.birthday-story-photo.left {
+  order: 0;
+}
+
+/* Image appears on the right */
+.birthday-story-photo.right {
+  order: 2;
+}
+
+.birthday-story-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Mobile layout: picture above text */
+@media screen and (max-width: 700px) {
+  .birthday-story-page {
+    padding: 0 1rem;
+  }
+
+  .birthday-story-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .birthday-story-photo,
+  .birthday-story-photo.left,
+  .birthday-story-photo.right {
+    order: 0;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .birthday-story-text {
+    order: 1;
+    width: 100%;
+  }
+}
+
+/* ========================================
+   STORIES SIDEBAR — THE ROOMMATES
+   ======================================== */
+
+.roommates-sidebar {
+  width: 100%;
+  padding: 0.5rem 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.roommates-title {
+  margin: 0;
+  color: #c84f2f;
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.roommates-divider {
+  width: 100%;
+  height: 2px;
+  margin: 1rem 0 1.75rem;
+  background-color: #c84f2f;
+  opacity: 0.85;
+}
+
+.roommates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.roommate-profile {
+  display: grid !important;
+  grid-template-columns: 48% minmax(0, 1fr);
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.roommate-headshot {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  aspect-ratio: 1 / 1;
+  margin: 0 !important;
+  padding: 0;
+  object-fit: cover;
+}
+
+.roommate-info {
+  min-width: 0;
+  text-align: left;
+}
+
+.roommate-name {
+  margin: 0 0 0.4rem !important;
+  color: #c84f2f;
+  font-family: "Fredoka", sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.roommate-occupation {
+  margin: 0 !important;
+  color: #292522;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Mobile layout */
+@media (max-width: 700px) {
+  .roommates-sidebar {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 0.5rem 0.75rem 1.25rem;
+  }
+
+  .roommates-title {
+    font-size: 1.8rem;
+  }
+
+  .roommates-divider {
+    margin: 0.9rem 0 1.4rem;
+  }
+
+  .roommates-list {
+    gap: 1.4rem;
+  }
+
+  .roommate-profile {
+    grid-template-columns: 46% minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .roommate-headshot {
+    width: 100% !important;
+    height: auto !important;
+    max-width: none !important;
+  }
+
+  .roommate-name {
+    font-size: 1.7rem;
+  }
+
+  .roommate-occupation {
+    font-size: 1.1rem;
+  }
+}
+/* Stop the Stories sidebar after Coco's profile */
+.grid-container.list-sidebar
+.page-sidebar:has(.roommates-sidebar) {
+  align-self: start;
+  height: fit-content;
+  min-height: 0;
+}
+/* ========================================
+   BOBO FISH RAIN
+   ======================================== */
+
+.roommates-sidebar {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.roommate-portrait-button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.roommate-portrait-button .roommate-headshot {
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.roommate-portrait-button:hover .roommate-headshot {
+  transform: translateY(-3px) rotate(-1deg);
+  filter: brightness(1.03);
+}
+
+.roommate-portrait-button:focus-visible {
+  outline: 3px solid #c84f2f;
+  outline-offset: 4px;
+}
+
+.fish-rain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fish-drop {
+  position: absolute;
+  top: -3rem;
+  left: var(--fish-left);
+  display: block;
+  width: var(--fish-size);
+  height: auto;
+  opacity: 0;
+  animation:
+    fish-fall var(--fall-duration)
+    linear var(--fall-delay)
+    both;
+}
+
+@keyframes fish-fall {
+  0% {
+    top: -2.5rem;
+    opacity: 0;
+    transform: translateX(0) rotate(-12deg);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  45% {
+    transform: translateX(var(--fish-sway)) rotate(10deg);
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    top: calc(100% + 2.5rem);
+    opacity: 0;
+    transform: translateX(0) rotate(-8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fish-drop {
+    display: none;
+  }
+
+  .roommate-portrait-button .roommate-headshot {
+    transition: none;
+  }
+}
+/* ========================================
+   TINY BOBO STORY
+   ======================================== */
+
+/* Bring the opening paragraph closer to the page title */
+main:has(.bobo-story-row) article > header {
+  margin-bottom: 1.25rem !important;
+  padding-bottom: 0 !important;
+}
+
+main:has(.bobo-story-row) article > header + * {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+main:has(.bobo-story-row) .post-body,
+main:has(.bobo-story-row) .page-body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+main:has(.bobo-story-row) .post-body > p:first-child,
+main:has(.bobo-story-row) .page-body > p:first-child {
+  margin-top: 0;
+}
+
+/* Image-and-text story rows */
+.bobo-story-row {
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 0.82fr)
+    minmax(0, 1.18fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+  margin: 3.5rem auto;
+}
+
+/* Move the picture to the right when requested */
+.bobo-story-row--right
+.bobo-story-row__media {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.bobo-story-row--right
+.bobo-story-row__text {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Smaller pictures and videos */
+.bobo-story-row__media {
+  width: 100%;
+  max-width: 430px;
+  margin: 0;
+  justify-self: center;
+  text-align: center;
+}
+
+.bobo-story-row__media img,
+.bobo-story-row__media video {
+  display: block;
+  width: 100%;
+  max-width: 430px;
+  max-height: 570px;
+  margin: 0 auto;
+  object-fit: contain;
+  background: #f5f1df;
+  box-shadow: 0 7px 20px rgba(54, 38, 27, 0.12);
+}
+
+.bobo-story-row__media video {
+  background: #211b18;
+}
+
+.bobo-story-row__media figcaption {
+  margin-top: 0.75rem;
+  color: #c94b2c;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.bobo-story-row__text {
+  min-width: 0;
+}
+
+.bobo-story-row__text p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.bobo-story-row__text p:last-child {
+  margin-bottom: 0;
+}
+
+.story-media-error {
+  padding: 1rem;
+  color: #a02f20;
+  background: #fff0e8;
+}
+
+/* Stack picture above text on smaller screens */
+@media (max-width: 760px) {
+  .bobo-story-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    margin: 2.75rem auto;
+  }
+
+  .bobo-story-row--right
+  .bobo-story-row__media {
+    order: 0;
+  }
+
+  .bobo-story-row--right
+  .bobo-story-row__text {
+    order: 1;
+  }
+
+  .bobo-story-row__media {
+    max-width: 360px;
+  }
+
+  .bobo-story-row__media img,
+  .bobo-story-row__media video {
+    max-width: 360px;
+    max-height: 520px;
+  }
+}
+/* ========================================
+   TINY BOBO PAIRED PHOTOS
+   ======================================== */
+
+.bobo-story-pair {
+  width: 100%;
+  margin: 3.5rem auto;
+}
+
+.bobo-story-pair__pictures {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.bobo-story-pair__picture {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+}
+.bobo-story-pair__picture img,
+.bobo-story-pair__picture video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center;
+  background: #f5f1df;
+  box-shadow: 0 7px 20px rgba(54, 38, 27, 0.12);
+}
+
+.bobo-story-pair__picture video {
+  object-fit: contain;
+  background: #211b18;
+}
+/* Keep all Tiny Bobo media titles consistent */
+.bobo-story-row__media figcaption,
+.bobo-story-pair__picture figcaption {
+  display: block;
+  margin-top: 0.75rem;
+  color: #c94b2c !important;
+  font-size: 1.05rem;
+  font-weight: 700 !important;
+  line-height: 1.3;
+  text-align: center;
+}
+/* ========================================
+   SITEWIDE STORY MEDIA
+   ======================================== */
+
+img.story-media-frame,
+video.story-media-frame {
+  box-sizing: border-box;
+
+  /* Frame touches the media directly */
+  padding: 0;
+  background: transparent;
+
+  /* Rounded tan frame */
+  border: 8px solid #cba172;
+  border-radius: 20px;
+
+  /* Darker bottom edge and soft shadow */
+  box-shadow:
+    0 5px 0 #95643d,
+    0 14px 26px rgba(70, 45, 28, 0.18);
+}
+
+/* Dark background only when a video has empty space */
+video.story-media-frame {
+  background: #211b18;
+}
+
+/* Consistent titles beneath all story media */
+.story-media-frame + figcaption {
+  display: block;
+  margin-top: 1.1rem;
+  color: #c94b2c;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Smaller frame on phones */
+@media (max-width: 600px) {
+  img.story-media-frame,
+  video.story-media-frame {
+    border-width: 6px;
+    border-radius: 16px;
+
+    box-shadow:
+      0 4px 0 #95643d,
+      0 10px 20px rgba(70, 45, 28, 0.16);
+  }
+}
+/* ========================================
+   BOBO STORY — THREE-IMAGE ROW
+   ======================================== */
+
+.bobo-story-trio {
+  clear: both;
+  width: 100%;
+  margin: 4rem auto;
+}
+
+.bobo-story-trio__pictures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.bobo-story-trio__picture {
+  min-width: 0;
+  margin: 0;
+}
+
+.bobo-story-trio__picture img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.bobo-story-trio__title {
+  margin: 1rem 0 1.5rem;
+  color: #c94b2c;
+  font-size: 1.25rem !important;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.bobo-story-trio__text {
+  width: 100%;
+}
+
+.bobo-story-trio__text > :first-child {
+  margin-top: 0;
+}
+
+.bobo-story-trio__text > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .bobo-story-trio__pictures {
+    grid-template-columns: 1fr;
+  }
+
+  .bobo-story-trio {
+    margin: 2.75rem auto;
+  }
+}
+/* ========================================
+   SITEWIDE STORY MEDIA
+   ======================================== */
+
+.bobo-story-media {
+  width: 100%;
+  max-width: 40rem;
+  margin: 3.5rem auto 1.75rem;
+  text-align: center;
+}
+
+.bobo-story-media img,
+.bobo-story-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 38rem;
+  margin: 0 auto;
+  object-fit: contain;
+}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@600;700;800;900&family=ZCOOL+KuaiLe&display=swap");
+
+/* Chinese body text */
+html:lang(zh) body {
+  font-family:
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif !important;
+  font-weight: 600;
+}
+
+/* Chinese titles, navigation and buttons */
+html:lang(zh) h1,
+html:lang(zh) h2,
+html:lang(zh) h3,
+html:lang(zh) nav a,
+html:lang(zh) main a {
+  font-family:
+    "ZCOOL KuaiLe",
+    "Noto Sans SC",
+    sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em;
+}

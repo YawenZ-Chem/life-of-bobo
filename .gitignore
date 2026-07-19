@@ -1,0 +1,9 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+public/
+resources/_gen/
+.hugo_build.lock
+themes/hugo-apero/exampleSite/

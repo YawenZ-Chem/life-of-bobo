@@ -1,0 +1,155 @@
+{{ $page := . }}
+{{ $section := $page.CurrentSection }}
+{{ $root := .Scratch.Get "$root" }}
+
+<article class="w-100 w-50-m w-third-l mb4 pb4 bb bw1 bw0-ns pb0-ns">
+
+  <!-- Show thumbnail when enabled on the Lookbook landing page -->
+  {{ if $root.Params.show_post_thumbnail }}
+
+    <div class="ph0 ph2-m ph3-l">
+
+      <!-- Find a cover belonging to the current page -->
+      {{- $images := $page.Resources.ByType "image" -}}
+      {{- $leaf := $images.GetMatch "*feature*" -}}
+      {{- $hex := $images.GetMatch "*hex*" -}}
+      {{- $thumbnail := cond (ne $hex nil) $hex $leaf -}}
+      {{- $isHex := ne $hex nil -}}
+
+      <!-- Chinese cards reuse the English page's cover -->
+      {{- if ne $page.Language.Lang "en" -}}
+
+        {{- range $translation := $page.AllTranslations -}}
+
+          {{- if eq $translation.Language.Lang "en" -}}
+
+            {{- $translatedImages := $translation.Resources.ByType "image" -}}
+            {{- $translatedLeaf := $translatedImages.GetMatch "*feature*" -}}
+            {{- $translatedHex := $translatedImages.GetMatch "*hex*" -}}
+
+            {{- if ne $translatedHex nil -}}
+
+              {{- $thumbnail = $translatedHex -}}
+              {{- $isHex = true -}}
+
+            {{- else if ne $translatedLeaf nil -}}
+
+              {{- $thumbnail = $translatedLeaf -}}
+              {{- $isHex = false -}}
+
+            {{- end -}}
+
+          {{- end -}}
+
+        {{- end -}}
+
+      {{- end -}}
+
+      <!-- Use the section cover only if the outfit has no cover -->
+      {{- if eq $thumbnail nil -}}
+
+        {{- $branch := ($section.Resources.ByType "image").GetMatch "*feature*" -}}
+        {{- $thumbnail = $branch -}}
+
+      {{- end -}}
+
+      <!-- Cover image and link -->
+      <div
+        class="aspect-ratio aspect-ratio--1x1 {{ if $isHex }}contain{{ else }}cover{{ end }} dim"
+        {{ with $thumbnail }}
+          style="background: url('{{ .RelPermalink | absURL }}') center center no-repeat"
+        {{ end }}
+      >
+        <a
+          href="{{ $page.RelPermalink }}"
+          class="w-100 absolute top-0 bottom-0"
+          aria-label="{{ $page.Title }}"
+        ></a>
+      </div>
+
+    </div>
+
+  {{ end }}
+
+  <!-- Card text -->
+  <div class="ph0 pa2-m pa3-l">
+
+    <header>
+
+      <h1 class="f3 f4-l mv2 lh-title fw4">
+        <a href="{{ $page.RelPermalink }}" class="db">
+          {{ $page.Title | markdownify }}
+        </a>
+      </h1>
+
+      <!-- Optional series -->
+      {{ range first 1 ($page.GetTerms "series") }}
+
+        <h2 class="f5">
+          <i class="fas fa-stream fa-fw pr1"></i>
+          <small class="f5 ttu tracked">Series: </small>
+          <a class="link i dim" href="{{ $section.RelPermalink }}">
+            {{ .LinkTitle }}
+          </a>
+        </h2>
+
+      {{ end }}
+
+    </header>
+
+    <!-- Description or summary -->
+    {{ $summary := cond (ne $page.Params.excerpt nil) $page.Params.excerpt $page.Summary }}
+
+    {{ with $summary }}
+
+      <p class="f6 lh-copy">
+        {{ . | markdownify | emojify }}
+      </p>
+
+    {{ end }}
+
+    <!-- Card footer -->
+    <footer>
+
+      {{ if $root.Params.show_author_byline }}
+
+        <p class="f7 db mv1">
+
+          {{ if $page.Params.author }}
+            By {{ $page.Params.author }}
+          {{ end }}
+
+          {{ with $page.Params.categories }}
+            in
+            {{ range . }}
+              <a href="{{ "categories/" | absURL }}{{ . | urlize }}">
+                {{ . }}
+              </a>
+            {{ end }}
+          {{ end }}
+
+        </p>
+
+      {{ end }}
+
+      {{ if $root.Params.show_post_date }}
+
+        <p class="f7 db mv1">
+          {{ $page.PublishDate.Format "January 2, 2006" }}
+        </p>
+
+      {{ end }}
+
+      {{ if and $root.Params.show_button_links $page.Params.links }}
+
+        <p class="db pt1">
+          {{ partial "shared/btn-links.html" $page }}
+        </p>
+
+      {{ end }}
+
+    </footer>
+
+  </div>
+
+</article>
