@@ -1,27 +1,30 @@
 ---
-description: Thank you to all the contributors!
-draft: false
+title: "Contributors"
+description: "The people and cat behind Life of Bobo."
 layout: standard
 show_title_as_headline: true
-title: Contributors
+show_author_byline: false
+show_post_date: false
 ---
 
-Thank you to all the folks who have contributed both technical and creative skills to this project:
+Life of Bobo is a small household production made possible by one cat, two roommates, and a growing collection of stories.
 
-+ [Desirée De Leon :giraffe:](http://desiree.rbind.io/) (designed 5 of the custom color themes, made illustrations for the workshop, and provided general aesthetic feedback along the way)
+## The household team
 
-+ [Garrick Aden-Buie :mage:](https://www.garrickadenbuie.com/) (debugged headroom.js and lent his panelset.js code to the theme)
+### Bobo · Stress Engineer
 
-+ [Allison Horst :dog2:](https://www.allisonhorst.com/) (awesome illustrations of campfires, seedlings, and evergreens, as well as my R Markdown hedgehog mascot :hedgehog:)
+Main character, wardrobe model, food critic, quality-control inspector, and executive supervisor.
 
-+ [Maëlle Salmon :fishing_pole_and_fish:](https://masalmon.eu/) (help with features, and naming the theme [Hugo Apéro](https://hugo-apero.netlify.app/)!)
+### Yawen · Chemist
 
-+ [Christophe Dervieux :crayon:](http://cderv.rbind.io/) (thinking through blogdown/Hugo intricacies and syntax highlighting)
+Project concept, site design and development, writing, Chinese/English translation, visual direction, and content curation.
 
-+ [Yihui Xie :martial_arts_uniform:](https://yihui.org/) (for the blogdown package, getting me hooked on Hugo, and helping me with layout code inspired by his many Hugo themes)
+### Coco · Engineer
 
-+ [Athanasia Monika Mowinckel :purple_heart:](https://drmowinckels.io/) (for help finding :bug: and SASS support for making color themes work so much better :art:)
+Featured roommate, engineering consultant, and member of Bobo's permanent support staff.
 
-+ [Jannik Buhr :otter:](https://jmbuhr.de) (enabling math rendering with mathjax and katex)
+## Technical foundation
 
-And last but not least, Eric Anderson and the team at [Formspree](https://formspree.io/) for developing a Hugo theme with such great bones: <https://github.com/formspree/blogophonic-hugo>
+The website is built with [Hugo](https://gohugo.io/) and uses [Hugo Apéro](https://github.com/hugo-apero/hugo-apero) as its theme foundation. Life of Bobo adds its own bilingual structure, page templates, responsive styling, story shortcodes, illustrations, and interactive effects.
+
+The upstream Hugo Apéro project and its contributors are credited in the [theme repository](https://github.com/hugo-apero/hugo-apero).

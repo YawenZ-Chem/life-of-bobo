@@ -186,14 +186,14 @@ enableEmoji = true
     weight = 6
 
   [[languages.en.menu.footer]]
-    name = "License"
-    title = "License"
+    name = "Copyright & Use"
+    title = "Copyright and permitted use"
     url = "/license/"
     weight = 1
 
   [[languages.en.menu.footer]]
     name = "Contact"
-    title = "Contact form"
+    title = "Contact Life of Bobo"
     url = "/contact/"
     weight = 2
 
@@ -202,7 +202,6 @@ enableEmoji = true
     title = "Contributors"
     url = "/contributors/"
     weight = 3
-
 
   # -------------------------
   # Chinese version
@@ -249,6 +248,24 @@ enableEmoji = true
     url = "/zh/elements/"
     weight = 6
 
+  [[languages.zh.menu.footer]]
+    name = "版权说明"
+    title = "版权与使用说明"
+    url = "/zh/license/"
+    weight = 1
+
+  [[languages.zh.menu.footer]]
+    name = "联系"
+    title = "联系 Life of Bobo"
+    url = "/zh/contact/"
+    weight = 2
+
+  [[languages.zh.menu.footer]]
+    name = "创作成员"
+    title = "Life of Bobo 的创作成员"
+    url = "/zh/contributors/"
+    weight = 3
+
 # see https://gohugo.io/about/hugo-and-gdpr/    
 [privacy]
   [privacy.disqus]
@@ -271,4 +288,3 @@ enableEmoji = true
   [privacy.youtube]
     disable = false
     privacyEnhanced = true
-
