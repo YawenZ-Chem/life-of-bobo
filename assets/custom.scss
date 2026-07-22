@@ -881,3 +881,20 @@ html:lang(zh) main a {
   font-weight: 400 !important;
   letter-spacing: 0.03em;
 }
+/* Keep the desktop navigation on one line */
+@media screen and (min-width: 60em) {
+  .site-nav .site-brand {
+    width: 17% !important;
+  }
+
+  .site-nav .site-links {
+    width: 83% !important;
+    white-space: nowrap;
+    letter-spacing: 0.06em !important;
+  }
+
+  .site-nav .site-links a {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+}

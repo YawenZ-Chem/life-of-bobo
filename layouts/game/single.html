@@ -1,0 +1,581 @@
+{{ $isZh := eq .Language.Lang "zh" }}
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #40342f;
+      background: #faf7ed;
+    }
+
+    .game-page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #bd4d31;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .game-language-switch {
+      margin-bottom: 10px;
+      color: #c74f30;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .game-language-switch a {
+      color: #c74f30;
+      text-decoration: none;
+    }
+
+    .game-language-switch a:hover { text-decoration: underline; }
+    .game-language-switch a.active { text-decoration: underline; }
+    .game-language-switch span { margin: 0 7px; }
+
+    h1 {
+      margin: 4px 0 8px;
+      color: #c74f30;
+      font-size: clamp(30px, 5vw, 54px);
+    }
+
+    .instructions {
+      max-width: 720px;
+      margin: 0 auto 18px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .instructions-zh {
+      max-width: 980px;
+    }
+
+    .game-shell {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border: 6px solid #6c4b38;
+      border-radius: 26px;
+      background: #bfe9f5;
+      box-shadow: 0 14px 30px rgba(64, 43, 31, 0.22);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    canvas.dragging { cursor: grabbing; }
+
+    .status {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 9px 18px;
+      border-radius: 999px;
+      color: #4e392d;
+      background: rgba(255, 250, 238, 0.9);
+      font-weight: 700;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .result-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(55, 42, 35, 0.7);
+    }
+
+    .result-overlay.visible { display: flex; }
+
+    .result-card {
+      width: min(390px, 90%);
+      padding: 20px 22px 26px;
+      border: 5px solid #654636;
+      border-radius: 28px;
+      background: #fffaf0;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+      animation: result-pop 0.35s ease-out;
+    }
+
+    @keyframes result-pop {
+      from { opacity: 0; transform: scale(0.65); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .result-face {
+      display: block;
+      width: min(235px, 68vw);
+      height: 235px;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+
+    .result-title {
+      margin: 4px 0 6px;
+      color: #c74f30;
+      font-size: clamp(27px, 5vw, 40px);
+    }
+
+    .result-message {
+      margin: 0 0 18px;
+      font-size: 17px;
+    }
+
+    .play-again {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 25px;
+      color: white;
+      background: #d87862;
+      box-shadow: 0 5px 0 #9d4c3c;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .play-again:hover { transform: translateY(-1px); }
+    .play-again:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #9d4c3c;
+    }
+
+    .tip {
+      margin-top: 14px;
+      color: #715c50;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .game-page { padding: 14px 8px 25px; }
+      .game-shell { border-width: 4px; border-radius: 18px; }
+      .instructions { padding: 0 8px; font-size: 15px; }
+      .status { top: 8px; padding: 7px 12px; font-size: 13px; }
+      .result-face { width: 180px; height: 180px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="game-page">
+    <a class="back-link" href="{{ "/" | relLangURL }}">
+      {{ if $isZh }}← 返回光头的网站{{ else }}← Back to Bobo’s website{{ end }}
+    </a>
+
+    <div class="game-language-switch" aria-label="Language selection">
+      {{ range $index, $page := .AllTranslations }}
+        {{ if $index }}<span>/</span>{{ end }}
+        <a href="{{ $page.RelPermalink }}" class="{{ if eq $page.Language.Lang $.Language.Lang }}active{{ end }}">
+          {{ if eq $page.Language.Lang "zh" }}中文{{ else }}ENGLISH{{ end }}
+        </a>
+      {{ end }}
+    </div>
+
+    <h1>{{ if $isZh }}光头的三文鱼任务{{ else }}Bobo’s Salmon Mission{{ end }}</h1>
+    <p class="instructions{{ if $isZh }} instructions-zh{{ end }}">
+      {{ if $isZh }}
+        把光头向后拉，调整发射角度和力度，然后松手。帮助他穿过上下移动的缺口，成功吃到三文鱼！
+      {{ else }}
+        Pull Bobo backward, choose the angle and strength, and release.
+        Help him fly through the moving gap and reach the salmon!
+      {{ end }}
+    </p>
+
+    <div class="game-shell">
+      <canvas id="gameCanvas" width="1000" height="560"
+              aria-label="{{ if $isZh }}光头的三文鱼任务游戏{{ else }}Bobo's Salmon Mission game{{ end }}"></canvas>
+      <div class="status" id="status">
+        {{ if $isZh }}向后拖动光头，然后松手发射！{{ else }}Drag Bobo backward and release!{{ end }}
+      </div>
+
+      <div class="result-overlay" id="resultOverlay">
+        <div class="result-card">
+          <img class="result-face" id="resultFace"
+               src="{{ "game/bobo-happy.png" | relURL }}"
+               alt="{{ if $isZh }}开心的光头{{ else }}Happy Bobo{{ end }}">
+          <h2 class="result-title" id="resultTitle">
+            {{ if $isZh }}三文鱼到嘴啦！{{ else }}Salmon acquired!{{ end }}
+          </h2>
+          <p class="result-message" id="resultMessage">
+            {{ if $isZh }}光头终于吃上晚饭了。{{ else }}Bobo finally gets his dinner.{{ end }}
+          </p>
+          <button class="play-again" id="playAgain">
+            {{ if $isZh }}再玩一次{{ else }}Play Again{{ end }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="tip">
+      {{ if $isZh }}小提示：等缺口移动到合适的位置，再松手发射光头。{{ else }}Tip: wait for the gap to move into the right position before releasing Bobo.{{ end }}
+    </p>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const statusText = document.getElementById("status");
+    const resultOverlay = document.getElementById("resultOverlay");
+    const resultFace = document.getElementById("resultFace");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultMessage = document.getElementById("resultMessage");
+    const playAgain = document.getElementById("playAgain");
+
+    const assetURLs = {
+      flying: "{{ "game/bobo-flying.png" | relURL }}",
+      happy: "{{ "game/bobo-happy.png" | relURL }}",
+      crying: "{{ "game/bobo-crying.png" | relURL }}",
+      salmon: "{{ "game/salmon.png" | relURL }}",
+      wall: "{{ "game/wall-texture.png" | relURL }}"
+    };
+
+    const copy = {{ if $isZh }}{
+      ready: "向后拖动光头，然后松手发射！",
+      power: "发射力度：",
+      flying: "光头冲呀！",
+      successStatus: "光头吃到三文鱼啦！",
+      failureStatus: "糟糕，光头没吃到！",
+      successTitle: "三文鱼到嘴啦！",
+      successMessage: "光头终于吃上晚饭了。",
+      failureTitle: "没有三文鱼……",
+      failureDefault: "光头只好再试一次。",
+      wallFailure: "光头撞到墙上了。",
+      escapedFailure: "三文鱼这次逃走了。",
+      happyAlt: "开心的光头",
+      cryingAlt: "哭泣的光头"
+    }{{ else }}{
+      ready: "Drag Bobo backward and release!",
+      power: "Launch power: ",
+      flying: "Go, Bobo, go!",
+      successStatus: "Bobo ate the salmon!",
+      failureStatus: "Oh no, Bobo missed!",
+      successTitle: "Salmon acquired!",
+      successMessage: "Bobo finally gets his dinner.",
+      failureTitle: "No salmon…",
+      failureDefault: "Bobo will have to try again.",
+      wallFailure: "Bobo bumped into the wall.",
+      escapedFailure: "The salmon escaped this time.",
+      happyAlt: "Happy Bobo",
+      cryingAlt: "Crying Bobo"
+    }{{ end }};
+
+    function loadImage(url) {
+      const image = new Image();
+      image.src = url;
+      return image;
+    }
+
+    const boboImage = loadImage(assetURLs.flying);
+    const salmonImage = loadImage(assetURLs.salmon);
+    const wallImage = loadImage(assetURLs.wall);
+    let wallPattern = null;
+
+    wallImage.addEventListener("load", function () {
+      wallPattern = ctx.createPattern(wallImage, "repeat");
+      if (wallPattern && wallPattern.setTransform) {
+        wallPattern.setTransform(new DOMMatrix().scale(0.36));
+      }
+    });
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    const launchPoint = { x: 145, y: 405 };
+
+    const bobo = {
+      x: launchPoint.x,
+      y: launchPoint.y,
+      vx: 0,
+      vy: 0,
+      radius: 26,
+      launched: false
+    };
+
+    const wall = { x: 510, width: 62, gapHeight: 155, gapCenter: 280 };
+    const salmon = { x: 875, y: 305, radius: 42 };
+
+    let dragging = false;
+    let gameFinished = false;
+    let animationTime = 0;
+    let lastTime = 0;
+
+    const gravity = 0.34;
+    const launchStrength = 0.14;
+    const maximumPull = 145;
+
+    function getPointerPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * (canvas.width / rect.width),
+        y: (event.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function distance(x1, y1, x2, y2) {
+      return Math.hypot(x2 - x1, y2 - y1);
+    }
+
+    function limitDragPosition(pointer) {
+      const dx = pointer.x - launchPoint.x;
+      const dy = pointer.y - launchPoint.y;
+      const currentDistance = Math.hypot(dx, dy);
+      if (currentDistance <= maximumPull) return pointer;
+      const scale = maximumPull / currentDistance;
+      return { x: launchPoint.x + dx * scale, y: launchPoint.y + dy * scale };
+    }
+
+    function beginDrag(event) {
+      if (bobo.launched || gameFinished) return;
+      const pointer = getPointerPosition(event);
+      if (distance(pointer.x, pointer.y, bobo.x, bobo.y) <= bobo.radius + 35) {
+        dragging = true;
+        canvas.classList.add("dragging");
+        canvas.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      }
+    }
+
+    function continueDrag(event) {
+      if (!dragging) return;
+      const pointer = limitDragPosition(getPointerPosition(event));
+      bobo.x = pointer.x;
+      bobo.y = pointer.y;
+      const power = Math.round(distance(bobo.x, bobo.y, launchPoint.x, launchPoint.y) / maximumPull * 100);
+      statusText.textContent = copy.power + power + "%";
+      event.preventDefault();
+    }
+
+    function releaseBobo(event) {
+      if (!dragging) return;
+      dragging = false;
+      canvas.classList.remove("dragging");
+      bobo.vx = (launchPoint.x - bobo.x) * launchStrength;
+      bobo.vy = (launchPoint.y - bobo.y) * launchStrength;
+      bobo.launched = true;
+      statusText.textContent = copy.flying;
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      event.preventDefault();
+    }
+
+    canvas.addEventListener("pointerdown", beginDrag);
+    canvas.addEventListener("pointermove", continueDrag);
+    canvas.addEventListener("pointerup", releaseBobo);
+    canvas.addEventListener("pointercancel", releaseBobo);
+
+    function circleTouchesRectangle(circleX, circleY, radius, rectX, rectY, rectWidth, rectHeight) {
+      const nearestX = Math.max(rectX, Math.min(circleX, rectX + rectWidth));
+      const nearestY = Math.max(rectY, Math.min(circleY, rectY + rectHeight));
+      const dx = circleX - nearestX;
+      const dy = circleY - nearestY;
+      return dx * dx + dy * dy <= radius * radius;
+    }
+
+    function updateGame(deltaScale) {
+      animationTime += deltaScale;
+      wall.gapCenter = 280 + Math.sin(animationTime * 0.025) * 120;
+      salmon.y = 305 + Math.sin(animationTime * 0.035) * 10;
+
+      if (!bobo.launched || gameFinished) return;
+
+      bobo.vy += gravity * deltaScale;
+      bobo.x += bobo.vx * deltaScale;
+      bobo.y += bobo.vy * deltaScale;
+
+      const gapTop = wall.gapCenter - wall.gapHeight / 2;
+      const gapBottom = wall.gapCenter + wall.gapHeight / 2;
+      const hitTopWall = circleTouchesRectangle(bobo.x, bobo.y, bobo.radius, wall.x, 0, wall.width, gapTop);
+      const hitBottomWall = circleTouchesRectangle(bobo.x, bobo.y, bobo.radius, wall.x, gapBottom, wall.width, HEIGHT - gapBottom);
+
+      if (hitTopWall || hitBottomWall) {
+        finishGame(false, copy.wallFailure);
+        return;
+      }
+
+      if (distance(bobo.x, bobo.y, salmon.x, salmon.y) <= bobo.radius + salmon.radius) {
+        finishGame(true);
+        return;
+      }
+
+      const outsideScreen =
+        bobo.y - bobo.radius > HEIGHT || bobo.y + bobo.radius < 0 ||
+        bobo.x - bobo.radius > WIDTH || bobo.x + bobo.radius < 0;
+
+      if (outsideScreen) finishGame(false, copy.escapedFailure);
+    }
+
+    function finishGame(success, failureMessage) {
+      gameFinished = true;
+
+      if (success) {
+        resultFace.src = assetURLs.happy;
+        resultFace.alt = copy.happyAlt;
+        resultTitle.textContent = copy.successTitle;
+        resultMessage.textContent = copy.successMessage;
+        statusText.textContent = copy.successStatus;
+      } else {
+        resultFace.src = assetURLs.crying;
+        resultFace.alt = copy.cryingAlt;
+        resultTitle.textContent = copy.failureTitle;
+        resultMessage.textContent = failureMessage || copy.failureDefault;
+        statusText.textContent = copy.failureStatus;
+      }
+
+      window.setTimeout(function () { resultOverlay.classList.add("visible"); }, 350);
+    }
+
+    function resetGame() {
+      bobo.x = launchPoint.x;
+      bobo.y = launchPoint.y;
+      bobo.vx = 0;
+      bobo.vy = 0;
+      bobo.launched = false;
+      dragging = false;
+      gameFinished = false;
+      resultOverlay.classList.remove("visible");
+      statusText.textContent = copy.ready;
+      canvas.classList.remove("dragging");
+    }
+
+    playAgain.addEventListener("click", resetGame);
+
+    function drawCloud(x, y, scale) {
+      ctx.beginPath();
+      ctx.arc(x, y, 30 * scale, 0, Math.PI * 2);
+      ctx.arc(x + 35 * scale, y - 12 * scale, 37 * scale, 0, Math.PI * 2);
+      ctx.arc(x + 75 * scale, y, 29 * scale, 0, Math.PI * 2);
+      ctx.arc(x + 38 * scale, y + 12 * scale, 43 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawBackground() {
+      const skyGradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+      skyGradient.addColorStop(0, "#b9dfe9");
+      skyGradient.addColorStop(0.7, "#f4edcf");
+      skyGradient.addColorStop(1, "#b8ca88");
+      ctx.fillStyle = skyGradient;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+      ctx.fillStyle = "rgba(255,250,236,0.76)";
+      drawCloud(165, 105, 1);
+      drawCloud(745, 115, 0.8);
+      ctx.fillStyle = "#a4be73";
+      ctx.fillRect(0, 500, WIDTH, 60);
+      ctx.fillStyle = "#8ca55f";
+      ctx.fillRect(0, 527, WIDTH, 33);
+    }
+
+    function drawWallSection(y, height) {
+      if (height <= 0) return;
+      ctx.fillStyle = wallPattern || "#d77a4d";
+      ctx.fillRect(wall.x, y, wall.width, height);
+      ctx.strokeStyle = "#6f493a";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(wall.x, y, wall.width, height);
+    }
+
+    function drawWall() {
+      const gapTop = wall.gapCenter - wall.gapHeight / 2;
+      const gapBottom = wall.gapCenter + wall.gapHeight / 2;
+      drawWallSection(0, gapTop);
+      drawWallSection(gapBottom, HEIGHT - gapBottom);
+    }
+
+    function drawSlingshot() {
+      ctx.strokeStyle = "#6f3d24";
+      ctx.lineWidth = 15;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(120, 500); ctx.lineTo(124, 395);
+      ctx.moveTo(120, 420); ctx.lineTo(90, 373);
+      ctx.moveTo(120, 420); ctx.lineTo(157, 373);
+      ctx.stroke();
+
+      if (!bobo.launched) {
+        ctx.strokeStyle = "#4b2b1d";
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(93, 374); ctx.lineTo(bobo.x, bobo.y); ctx.lineTo(157, 374);
+        ctx.stroke();
+      }
+    }
+
+    function drawTrajectory() {
+      if (!dragging) return;
+      let x = bobo.x;
+      let y = bobo.y;
+      let vx = (launchPoint.x - bobo.x) * launchStrength;
+      let vy = (launchPoint.y - bobo.y) * launchStrength;
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      for (let i = 0; i < 42; i++) {
+        vy += gravity;
+        x += vx;
+        y += vy;
+        if (i % 4 === 0) {
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function drawBobo() {
+      if (!boboImage.complete || !boboImage.naturalWidth) return;
+      ctx.save();
+      ctx.translate(bobo.x, bobo.y);
+      if (bobo.launched) ctx.rotate(Math.atan2(bobo.vy, bobo.vx) * 0.12);
+      const spriteWidth = 126;
+      const spriteHeight = spriteWidth * (boboImage.naturalHeight / boboImage.naturalWidth);
+      ctx.drawImage(boboImage, -spriteWidth / 2, -spriteHeight / 2, spriteWidth, spriteHeight);
+      ctx.restore();
+    }
+
+    function drawSalmon() {
+      if (!salmonImage.complete || !salmonImage.naturalWidth) return;
+      const spriteWidth = 118;
+      const spriteHeight = spriteWidth * (salmonImage.naturalHeight / salmonImage.naturalWidth);
+      ctx.drawImage(salmonImage, salmon.x - spriteWidth / 2, salmon.y - spriteHeight / 2, spriteWidth, spriteHeight);
+    }
+
+    function drawFrame(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      const elapsed = timestamp - lastTime;
+      const deltaScale = Math.min(elapsed / 16.67, 2);
+      lastTime = timestamp;
+
+      updateGame(deltaScale);
+      drawBackground();
+      drawTrajectory();
+      drawSlingshot();
+      drawWall();
+      if (!gameFinished || !resultOverlay.classList.contains("visible")) drawBobo();
+      drawSalmon();
+      requestAnimationFrame(drawFrame);
+    }
+
+    requestAnimationFrame(drawFrame);
+  </script>
+</body>
+</html>
